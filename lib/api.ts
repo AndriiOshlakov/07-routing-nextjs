@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NoteCreatePayload, Note } from "@/types/note";
+import { NoteCreatePayload, Note, NoteTag } from "@/types/note";
 
 const myPostsKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
@@ -23,6 +23,19 @@ export const fetchNotes = async (
       page,
       perPage,
       search,
+    },
+  });
+  return response.data;
+};
+
+// fetchNotesByTag виконує запит на сервер для отримання колекції нотатків відфільтрованих за тегом
+export const fetchNotesByTag = async (
+  tag: NoteTag
+): Promise<PostsHttpResponse> => {
+  const response = await axios.get<PostsHttpResponse>(BASE_URL, {
+    headers,
+    params: {
+      tag,
     },
   });
   return response.data;
