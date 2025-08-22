@@ -8,8 +8,9 @@ import { fetchNotes } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
 import Modal from "@/components/Modal/Modal";
-
 import NoteForm from "@/components/NoteForm/NoteForm";
+import { useParams } from "next/navigation";
+import { NoteTag } from "@/types/note";
 
 function NotesClient() {
   const [page, setPage] = useState(1);
@@ -19,7 +20,7 @@ function NotesClient() {
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
-    setPage(1); // Скидаємо сторінку при новому пошуку
+    setPage(1);
   }, 500);
 
   const handleSearchChange = (value: string) => {
@@ -28,11 +29,15 @@ function NotesClient() {
   };
 
   const perPage = 12;
+  const { slug } = useParams<{ slug: string[] }>();
+
+  const tag = slug?.[0] === "All" ? undefined : (slug?.[0] as NoteTag);
 
   const { data } = useQuery({
-    queryKey: ["notes", search, page],
-    queryFn: () => fetchNotes(page, perPage, search),
+    queryKey: ["notes", search, page, tag],
+    queryFn: () => fetchNotes({ page, perPage, search, tag }),
     placeholderData: keepPreviousData,
+    refetchOnMount: false,
   });
 
   const totalPages = data?.totalPages ?? 0;
@@ -41,6 +46,7 @@ function NotesClient() {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox value={inputValue} onChange={handleSearchChange} />
+
         {totalPages > 1 && (
           <Pagination
             pageCount={totalPages}
@@ -48,28 +54,20 @@ function NotesClient() {
             forcePage={page - 1}
           />
         )}
+
         <button
           className={css.button}
-          onClick={() => {
-            setIsModalOpen(!isModalOpen);
-          }}
+          onClick={() => setIsModalOpen(!isModalOpen)}
         >
           Create note +
         </button>
       </header>
 
-      {data && data?.notes.length >= 1 && <NoteList items={data.notes} />}
+      {data && data.notes.length > 0 && <NoteList items={data.notes} />}
+
       {isModalOpen && (
-        <Modal
-          onClose={() => {
-            setIsModalOpen(!isModalOpen);
-          }}
-        >
-          <NoteForm
-            onCancel={() => {
-              setIsModalOpen(!isModalOpen);
-            }}
-          />
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <NoteForm onCancel={() => setIsModalOpen(false)} />
         </Modal>
       )}
     </div>

@@ -12,31 +12,22 @@ const BASE_URL = "https://notehub-public.goit.study/api/notes";
 const headers = { Authorization: `Bearer ${myPostsKey}` };
 
 // fetchNotes виконує запит на сервер для отримання колекції нотатків
-export const fetchNotes = async (
-  page: number,
-  perPage: number,
-  search: string
-): Promise<PostsHttpResponse> => {
-  const response = await axios.get<PostsHttpResponse>(BASE_URL, {
-    headers,
-    params: {
-      page,
-      perPage,
-      search,
-    },
-  });
-  return response.data;
-};
+export interface FetchNotesParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+  tag?: NoteTag;
+}
 
-// fetchNotesByTag виконує запит на сервер для отримання колекції нотатків відфільтрованих за тегом
-export const fetchNotesByTag = async (
-  tag: NoteTag
-): Promise<PostsHttpResponse> => {
+export const fetchNotes = async ({
+  page,
+  perPage,
+  search,
+  tag,
+}: FetchNotesParams): Promise<PostsHttpResponse> => {
   const response = await axios.get<PostsHttpResponse>(BASE_URL, {
     headers,
-    params: {
-      tag,
-    },
+    params: { page, perPage, search, tag },
   });
   return response.data;
 };

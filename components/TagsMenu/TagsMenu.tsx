@@ -20,7 +20,7 @@ const TagsMenu = () => {
           {/* список тегів */}
           <li className={css.menuItem}>
             <Link
-              href={`/notes/filter/all`}
+              href={`/notes/filter/All`}
               className={css.menuLink}
               onClick={toggle}
             >
