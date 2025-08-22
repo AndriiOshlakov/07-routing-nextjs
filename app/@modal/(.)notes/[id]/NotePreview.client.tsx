@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import css from "@/components/PreviewModal/PreviewModal.module.css";
+import css from "@/app/@modal/(.)notes/[id]/PreviewModal.module.css";
 
 interface ModalProps {
   children: React.ReactNode;
