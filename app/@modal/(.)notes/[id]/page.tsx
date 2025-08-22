@@ -1,5 +1,5 @@
 import { fetchNoteById } from "@/lib/api";
-// import css from "@/app/@modal/(.)notes/[id]/NotePreview.module.css";
+
 import {
   QueryClient,
   HydrationBoundary,
@@ -14,7 +14,6 @@ type Props = {
 
 const NotePreview = async ({ params }: Props) => {
   const { id } = await params;
-  // const note = await fetchNoteById(id);
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
