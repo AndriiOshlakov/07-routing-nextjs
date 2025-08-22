@@ -4,7 +4,7 @@ import NoteList from "@/components/NoteList/NoteList";
 import { NoteTag } from "@/types/note";
 
 type Props = {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 };
 
 const NotesPage = async ({ params }: Props) => {
