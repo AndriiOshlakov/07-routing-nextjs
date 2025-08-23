@@ -9,10 +9,13 @@ import SearchBox from "@/components/SearchBox/SearchBox";
 import { useDebouncedCallback } from "use-debounce";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
-import { useParams } from "next/navigation";
 import { NoteTag } from "@/types/note";
 
-function NotesClient() {
+interface NotesClientProps {
+  tag?: NoteTag;
+}
+
+function NotesClient({ tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -29,9 +32,6 @@ function NotesClient() {
   };
 
   const perPage = 12;
-  const { slug } = useParams<{ slug: string[] }>();
-
-  const tag = slug?.[0] === "All" ? undefined : (slug?.[0] as NoteTag);
 
   const { data } = useQuery({
     queryKey: ["notes", search, page, tag],
