@@ -20,16 +20,16 @@ export default function PreviewModal() {
     queryFn: () => fetchNoteById(id),
     refetchOnMount: false,
   });
+  if (isLoading) {
+    return <p>Loading, please wait...</p>;
+  }
 
   if (!note || error) {
     return <p>Something went wrong.</p>;
   }
-  if (isLoading) {
-    return <p>Loading, please wait...</p>;
-  }
+
   return (
     <Modal onClose={close}>
-      {" "}
       <button onClick={close} className={css.backBtn}>
         Close
       </button>
@@ -38,6 +38,7 @@ export default function PreviewModal() {
           <div className={css.header}>
             <h2>{note.title}</h2>
           </div>
+          <p className={css.tag}>{note.tag}</p>
           <p className={css.content}>{note.content}</p>
           <p className={css.date}>
             {note?.createdAt

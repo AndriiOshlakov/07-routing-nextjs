@@ -16,12 +16,12 @@ const NoteDetailsClient = () => {
     queryFn: () => fetchNoteById(id),
     refetchOnMount: false,
   });
+  if (isLoading) {
+    return <p>Loading, please wait...</p>;
+  }
 
   if (!note || error) {
     return <p>Something went wrong.</p>;
-  }
-  if (isLoading) {
-    return <p>Loading, please wait...</p>;
   }
 
   return (
@@ -30,6 +30,7 @@ const NoteDetailsClient = () => {
         <div className={css.header}>
           <h2>{note.title}</h2>
         </div>
+        <p className={css.tag}>{note.tag}</p>
         <p className={css.content}>{note.content}</p>
         <p className={css.date}>
           {note?.createdAt
